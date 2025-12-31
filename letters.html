@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>12 Love Letters</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      font-family:"Poppins",sans-serif;
+      background:radial-gradient(circle at top,#ffdde1 0%,#ee9ca7 35%,#ff758c 70%,#ff7eb3 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem 1rem;
+    }
+    .wrapper{
+      max-width:960px;width:100%;
+      background:rgba(255,255,255,0.1);
+      border-radius:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.25);
+      padding:2rem 1.5rem 2.5rem;
+    }
+    .header{
+      text-align:center;
+      margin-bottom:1.75rem;
+    }
+    .header h1{
+      font-family:"Sacramento",cursive;
+      font-size:3rem;
+      margin-bottom:0.25rem;
+    }
+    .header p{
+      font-size:0.95rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      opacity:0.9;
+    }
+
+    /* 4 x 3 grid for 12 months */
+    .months-grid{
+      margin-top:1.5rem;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(120px,1fr));
+      gap:1.25rem;
+      justify-items:center;
+    }
+
+    .month-btn{
+      position:relative;
+      width:140px;
+      height:90px;
+      cursor:pointer;
+      background:transparent;
+      border:none;
+      outline:none;
+      transform:translateY(0);
+      transition:transform 0.15s ease, filter 0.15s ease;
+    }
+    .month-btn:hover{
+      transform:translateY(-4px);
+      filter:drop-shadow(0 10px 18px rgba(0,0,0,0.45));
+    }
+
+    /* Envelope shape */
+    .envelope{
+      position:relative;
+      width:100%;
+      height:100%;
+      background:#ffe5ec;
+      border-radius:10px;
+      box-shadow:0 6px 14px rgba(0,0,0,0.25);
+      overflow:hidden;
+    }
+    .envelope-body{
+      position:absolute;
+      inset:40% 0 0 0;
+      background:linear-gradient(135deg,#ff9eb5,#ff6b88);
+    }
+    .envelope-flap{
+      position:absolute;
+      top:0;left:0;
+      width:0;height:0;
+      border-left:70px solid transparent;
+      border-right:70px solid transparent;
+      border-bottom:55px solid #ffb5c8;
+    }
+    .envelope-flap::after{
+      content:"";
+      position:absolute;
+      top:6px;
+      left:-64px;
+      width:0;height:0;
+      border-left:64px solid transparent;
+      border-right:64px solid transparent;
+      border-bottom:45px solid #ffe5ec;
+      opacity:0.85;
+    }
+    .envelope-heart{
+      position:absolute;
+      top:34px;
+      left:50%;
+      transform:translateX(-50%) rotate(-45deg);
+      width:14px;
+      height:14px;
+      background:#ff1744;
+    }
+    .envelope-heart::before,
+    .envelope-heart::after{
+      content:"";
+      position:absolute;
+      width:14px;height:14px;
+      background:#ff1744;
+      border-radius:50%;
+    }
+    .envelope-heart::before{
+      top:-7px;left:0;
+    }
+    .envelope-heart::after{
+      left:7px;top:0;
+    }
+    .month-label{
+      position:absolute;
+      inset:auto 0 6px 0;
+      text-align:center;
+      font-size:0.8rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:#c21f4b;
+    }
+
+    /* Special note button area */
+    .special-wrapper{
+      margin-top:2rem;
+      display:flex;
+      justify-content:center;
+    }
+
+    .back-link{
+      display:inline-block;
+      margin-top:1.5rem;
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.13em;
+      color:#ffe5ec;
+      text-decoration:none;
+    }
+    .back-link:hover{text-decoration:underline;}
+
+    /* Modal popup */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:10;
+    }
+    .modal-overlay.active{
+      display:flex;
+    }
+    .modal{
+      background:#fff;
+      color:#ff3366;
+      max-width:420px;
+      width:90%;
+      border-radius:18px;
+      padding:1.75rem 1.5rem 1.5rem;
+      box-shadow:0 20px 40px rgba(0,0,0,0.4);
+      position:relative;
+      text-align:center;
+    }
+    .modal h2{
+      font-family:"Sacramento",cursive;
+      font-size:2.4rem;
+      margin-bottom:0.5rem;
+    }
+    .modal p{
+      font-size:0.95rem;
+      line-height:1.7;
+      margin-bottom:1.3rem;
+    }
+    .close-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0.45rem 1.25rem;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      background:#ff3366;
+      color:#fff;
+      font-size:0.8rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.09em;
+      margin:0 auto;
+      transition:transform 0.15s ease,box-shadow 0.15s ease;
+      box-shadow:0 6px 14px rgba(255,51,102,0.5);
+    }
+    .close-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(255,51,102,0.6);
+    }
+
+    @media(max-width:800px){
+      .months-grid{
+        grid-template-columns:repeat(3,minmax(110px,1fr)); /* auto wrap on small screens */
+      }
+    }
+    @media(max-width:600px){
+      .wrapper{padding:1.75rem 1.25rem 2.25rem;}
+      .header h1{font-size:2.4rem;}
+      .month-btn{width:120px;height:80px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>12 Months of Love</h1>
+      <p>Tap a little envelope to open its letter</p>
+    </div>
+
+    <!-- 4 x 3 grid of month envelopes -->
+    <div class="months-grid">
+      <button class="month-btn" onclick="openLetter('January')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">January</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('February')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">February</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('March')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">March</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('April')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">April</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('May')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">May</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('June')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">June</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('July')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">July</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('August')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">August</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('September')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">September</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('October')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">October</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('November')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">November</span>
+        </div>
+      </button>
+
+      <button class="month-btn" onclick="openLetter('December')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">December</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Special note button centered at bottom -->
+    <div class="special-wrapper">
+      <button class="month-btn" onclick="openLetter('Special')">
+        <div class="envelope">
+          <div class="envelope-body"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart"></div>
+          <span class="month-label">Special Note</span>
+        </div>
+      </button>
+    </div>
+
+    <a href="index.html" class="back-link">← Back to love space</a>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="letterModal">
+      <h2 id="modalTitle">Love Letter</h2>
+      <p id="modalText">
+        This is a little love note.
+      </p>
+      <button class="close-btn" onclick="closeLetter()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const lettersByMonth = {
+      January: "It's the month from where our journey actually started, when neither of us knew about each other's feelings nor wanted to confess if.😳",
+      February: "The month of love brought us together. Just a day before valentine's, I actually turned to be ur valentine 💕",
+      March: "It was the beginning of getting to know each other that eventually turned us to into a strong magnet with opposite poles 🧲",
+      April: "The month of stress , worries and regret as one went for another journey while the other already started to make the journey for her upcoming life 🤝",
+      May: "The month with the longest days for one while shortest for the other but nevermind we both indeed made it out together holding hands and face with a charing smile 🫂",
+      June: "A calm month just like the calmness after a huge strom. Everything was wreaked but we were ready to repair it with our love 💖",
+      July: "The month with excitement and cries all together as we celebrate together as I turned 18 and was the last day of our togetherness before going into long distance. 💐",
+      August: "The month with filled with cries and unsaid words. Those days with fake smiles and night up with heavy hearts. Here we were miles apart but still connected with hearts ❤️‍🩹",
+      September: "The month were all our prayers were heard bringing us the joy and hope of being together in same cities and replacing those all day VCs with 'ketla vage aavu malva'👫",
+      October: "The month when our 1st night date made its way to our lives as we stood there hugging each other tight when the clock struck 12 beneath clear sky . 🫂",
+      November: "The month when again the strom hit us trying to seperate us but again we still fought it back keeping each other right next and holding them tight.❤️‍🔥",
+      December: "Here comes the end of the year but not for our love. Ntg changed between us except the growing love and care for each other. 🫶"
+      Special: "Now we are ready to step into another year, making new memories and falling for each other once again. Hoping our relationship would be better with each passing days bringing us more closer . 💓",
+          };
+
+    function openLetter(month) {
+      const modalOverlay = document.getElementById("modalOverlay");
+      const title = document.getElementById("modalTitle");
+      const text = document.getElementById("modalText");
+
+      title.textContent = (month === "Special")
+        ? "Special Love Note"
+        : month + " Love Letter";
+
+      text.textContent = lettersByMonth[month] || "You are loved in every single moment of this month.";
+      modalOverlay.classList.add("active");
+    }
+
+    function closeLetter() {
+      const modalOverlay = document.getElementById("modalOverlay");
+      modalOverlay.classList.remove("active");
+    }
+
+    // Close when clicking outside the modal
+    document.getElementById("modalOverlay").addEventListener("click", function (e) {
+      if (e.target === this) {
+        closeLetter();
+      }
+    });
+  </script>
+</body>
+</html>
+

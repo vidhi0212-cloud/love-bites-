@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Love Games</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      font-family:"Poppins",sans-serif;
+      background:radial-gradient(circle at top,#ffdde1 0%,#ee9ca7 35%,#ff758c 70%,#ff7eb3 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem 1rem;
+    }
+    .wrapper{
+      max-width:700px;width:100%;
+      background:rgba(255,255,255,0.1);
+      border-radius:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.25);
+      padding:2rem 1.5rem 2.5rem;
+      text-align:center;
+    }
+    .header h1{
+      font-family:"Sacramento",cursive;
+      font-size:3rem;margin-bottom:0.25rem;
+    }
+    .header p{
+      font-size:0.95rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      opacity:0.9;
+      margin-bottom:1.75rem;
+    }
+    .games-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:1.25rem;
+      margin-bottom:1.75rem;
+    }
+    .game-btn{
+      padding:1.1rem 1rem;
+      border-radius:18px;
+      border:none;
+      cursor:pointer;
+      background:#fff;
+      color:#ff3366;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      font-size:0.8rem;
+      box-shadow:0 8px 18px rgba(255,255,255,0.45);
+      transition:transform 0.15s,box-shadow 0.15s,background 0.2s,color 0.2s;
+    }
+    .game-btn span{
+      display:block;
+      font-size:0.75rem;
+      text-transform:none;
+      letter-spacing:0;
+      opacity:0.85;
+      margin-top:0.2rem;
+    }
+    .game-btn:hover{
+      transform:translateY(-3px);
+      box-shadow:0 12px 22px rgba(0,0,0,0.25);
+      background:#ff3366;
+      color:#fff;
+    }
+    .game-btn:hover span{
+      opacity:1;
+    }
+    .back-link{
+      display:inline-block;
+      margin-top:0.5rem;
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.13em;
+      color:#ffe5ec;
+      text-decoration:none;
+    }
+    .back-link:hover{
+      text-decoration:underline;
+    }
+    @media(max-width:600px){
+      .header h1{font-size:2.4rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Love Games</h1>
+      <p>Pick a sweet little game to play together</p>
+    </div>
+
+    <div class="games-grid">
+      <button class="game-btn" onclick="startGame('quiz')">
+        Love Quiz
+        <span>Guess each other’s favorites</span>
+      </button>
+
+      <button class="game-btn" onclick="startGame('memory')">
+        Memory Hearts
+        <span>Flip cards and match heart pairs</span>
+      </button>
+
+      <button class="game-btn" onclick="startGame('truth')">
+        Truth or Love
+        <span>Random cute truths & soft dares</span>
+      </button>
+
+      <button class="game-btn" onclick="startGame('surprise')">
+        Surprise Task
+        <span>Get a random romantic mission</span>
+      </button>
+    </div>
+
+    <a href="index.html" class="back-link">← Back to love space</a>
+  </div>
+
+  <script>
+    function startGame(type) {
+      if (type === "quiz") {
+        window.location.href = "love-quiz.html";
+      } else if (type === "memory") {
+        window.location.href = "memory-hearts.html";
+      } else if (type === "truth") {
+        window.location.href = "truth-or-love.html";
+      } else if (type === "surprise") {
+        window.location.href = "surprise-task.html";
+      }
+    }
+  </script>
+</body>
+</html>

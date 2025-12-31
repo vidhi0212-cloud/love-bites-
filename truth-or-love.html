@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Truth or Love</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      font-family:"Poppins",sans-serif;
+      background:radial-gradient(circle at top,#ffdde1 0%,#ee9ca7 35%,#ff758c 70%,#ff7eb3 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem 1rem;
+    }
+    .wrapper{
+      max-width:650px;width:100%;
+      background:rgba(255,255,255,0.12);
+      border-radius:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.25);
+      padding:2rem 1.5rem 2.5rem;
+      text-align:center;
+    }
+    .header h1{
+      font-family:"Sacramento",cursive;
+      font-size:3rem;margin-bottom:0.25rem;
+    }
+    .header p{
+      font-size:0.95rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      opacity:0.9;
+      margin-bottom:1.5rem;
+    }
+    .prompt-box{
+      background:rgba(255,255,255,0.18);
+      border-radius:18px;
+      padding:1.3rem 1rem;
+      min-height:110px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.98rem;
+      line-height:1.6;
+    }
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap:1rem;
+      margin-top:1.25rem;
+      flex-wrap:wrap;
+    }
+    .btn-main{
+      padding:0.7rem 1.7rem;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      background:#fff;
+      color:#ff3366;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.09em;
+      font-size:0.8rem;
+      box-shadow:0 8px 18px rgba(255,255,255,0.45);
+      transition:transform 0.15s,box-shadow 0.15s,background 0.2s,color 0.2s;
+    }
+    .btn-main:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 22px rgba(0,0,0,0.25);
+      background:#ff3366;color:#fff;
+    }
+    .back-link{
+      display:inline-block;
+      margin-top:1.5rem;
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.13em;
+      color:#ffe5ec;
+      text-decoration:none;
+    }
+    .back-link:hover{text-decoration:underline;}
+    @media(max-width:600px){
+      .header h1{font-size:2.4rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Truth or Love</h1>
+      <p>Tap for a sweet truth or a soft dare</p>
+    </div>
+
+    <div class="prompt-box" id="promptBox">
+      Press one of the buttons below to get your next Truth or Love dare.
+    </div>
+
+    <div class="buttons">
+      <button class="btn-main" onclick="showTruth()">Truth</button>
+      <button class="btn-main" onclick="showLove()">Love Dare</button>
+    </div>
+
+    <a href="games.html" class="back-link">← Back to games</a>
+  </div>
+
+  <script>
+    const truths = [
+      "What is one tiny thing I do that makes you feel very loved?",
+      "When did you first realize you liked me more than just a friend?",
+      "What is your favorite memory of us so far?",
+      "What is something you are afraid to tell me but want me to know?",
+      "If you had to describe our love in three words, what would they be?",
+      "What was your very first impression of me?",
+      "What do you secretly brag about when you talk about us?",
+      "What is one dream you really want us to share in the future?"
+    ];
+
+    const dares = [
+      "Send me a one‑line love text right now.",
+      "Give me a 10‑second tight hug without saying anything.",
+      "Tell me one thing you love about yourself and one thing you love about me.",
+      "Share a song that reminds you of me and tell me why.",
+      "Write a tiny 3‑line love poem for me and read it out loud.",
+      "Hold my hand for the next 2 minutes, no matter what.",
+      "Tell me one promise you want to keep for us this year.",
+      "Show me your favorite photo of us and tell me the story behind it."
+    ];
+
+    function randomFrom(list) {
+      const index = Math.floor(Math.random() * list.length);
+      return list[index];
+    }
+
+    function showTruth() {
+      const box = document.getElementById("promptBox");
+      box.textContent = "Truth: " + randomFrom(truths);
+    }
+
+    function showLove() {
+      const box = document.getElementById("promptBox");
+      box.textContent = "Love Dare: " + randomFrom(dares);
+    }
+  </script>
+</body>
+</html>

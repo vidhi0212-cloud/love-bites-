@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surprise Task</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      font-family:"Poppins",sans-serif;
+      background:radial-gradient(circle at top,#ffdde1 0%,#ee9ca7 35%,#ff758c 70%,#ff7eb3 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem 1rem;
+    }
+    .wrapper{
+      max-width:650px;width:100%;
+      background:rgba(255,255,255,0.12);
+      border-radius:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.25);
+      padding:2rem 1.5rem 2.5rem;
+      text-align:center;
+    }
+    .header h1{
+      font-family:"Sacramento",cursive;
+      font-size:3rem;margin-bottom:0.25rem;
+    }
+    .header p{
+      font-size:0.95rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      opacity:0.9;
+      margin-bottom:1.5rem;
+    }
+    .task-box{
+      background:rgba(255,255,255,0.18);
+      border-radius:18px;
+      padding:1.4rem 1.1rem;
+      min-height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.98rem;
+      line-height:1.6;
+    }
+    .btn-main{
+      margin-top:1.25rem;
+      padding:0.7rem 1.8rem;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      background:#fff;
+      color:#ff3366;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.09em;
+      font-size:0.8rem;
+      box-shadow:0 8px 18px rgba(255,255,255,0.45);
+      transition:transform 0.15s,box-shadow 0.15s,background 0.2s,color 0.2s;
+    }
+    .btn-main:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 22px rgba(0,0,0,0.25);
+      background:#ff3366;color:#fff;
+    }
+    .back-link{
+      display:inline-block;
+      margin-top:1.5rem;
+      font-size:0.8rem;
+      text-transform:uppercase;
+      letter-spacing:0.13em;
+      color:#ffe5ec;
+      text-decoration:none;
+    }
+    .back-link:hover{text-decoration:underline;}
+    @media(max-width:600px){
+      .header h1{font-size:2.4rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Surprise Task</h1>
+      <p>Press the button and do the tiny mission together</p>
+    </div>
+
+    <div class="task-box" id="taskBox">
+      Click “New Mission” to get a small romantic task to do right now.
+    </div>
+
+    <button class="btn-main" onclick="newTask()">New Mission</button>
+
+    <a href="games.html" class="back-link">← Back to games</a>
+  </div>
+
+  <script>
+    const tasks = [
+      "Take a selfie together right now, and save it as today’s memory.",
+      "Give each other three compliments: one about looks, one about heart, and one about personality.",
+      "Plan your next tiny date (even if it is just tea and a talk) and set a rough day for it.",
+      "Hold hands and share one thing you are grateful for in the other person.",
+      "Pick a song and listen to it together from start to finish without touching your phones.",
+      "Write a one‑sentence love note for each other and swap them.",
+      "Tell each other one fear and one dream, and promise to support each other in both.",
+      "Look into each other’s eyes for 20 seconds, then say what you felt.",
+      "Pick a random old memory and describe it as if it was a scene in a movie.",
+      "Make a tiny promise you can keep today (like a walk, a call, or a message) and actually do it."
+    ];
+
+    function newTask() {
+      const index = Math.floor(Math.random() * tasks.length);
+      document.getElementById("taskBox").textContent = tasks[index];
+    }
+  </script>
+</body>
+</html>

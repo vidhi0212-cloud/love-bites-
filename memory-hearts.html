@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Memory Hearts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      font-family:"Poppins",sans-serif;
+      background:radial-gradient(circle at top,#ffdde1 0%,#ee9ca7 35%,#ff758c 70%,#ff7eb3 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+    }
+    .wrapper{
+      max-width:1000px;width:100%;
+      background:rgba(255,255,255,0.12);
+      border-radius:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.25);
+      padding:1.25rem 1.25rem 1.75rem;
+      text-align:center;
+    }
+    .header h1{
+      font-family:"Sacramento",cursive;
+      font-size:2.4rem;margin-bottom:0.15rem;
+    }
+    .header p{
+      font-size:0.85rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      opacity:0.9;
+      margin-bottom:0.9rem;
+    }
+    .info{
+      font-size:0.85rem;
+      margin-bottom:0.35rem;
+    }
+    .board{
+      display:grid;
+      grid-template-columns:repeat(10,1fr);
+      gap:0.35rem;
+      margin:0.6rem auto 0.9rem;
+      max-width:900px;
+    }
+    .card{
+      aspect-ratio:3/4;
+      border-radius:8px;
+      background:#fff;
+      color:#ff3366;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.2rem;
+      cursor:pointer;
+      box-shadow:0 3px 8px rgba(0,0,0,0.25);
+      transition:transform 0.12s,box-shadow 0.12s,background 0.12s,color 0.12s;
+      user-select:none;
+    }
+    .card.flipped{
+      background:#ff3366;
+      color:#fff;
+      transform:translateY(-2px);
+      box-shadow:0 6px 14px rgba(0,0,0,0.3);
+    }
+    .card.matched{
+      background:#8bc34a;
+      color:#fff;
+      cursor:default;
+      box-shadow:0 4px 10px rgba(0,0,0,0.25);
+    }
+    .controls{
+      margin-top:0.3rem;
+    }
+    .btn-main{
+      padding:0.45rem 1.4rem;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      background:#fff;
+      color:#ff3366;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.09em;
+      font-size:0.75rem;
+      box-shadow:0 6px 14px rgba(255,255,255,0.45);
+      transition:transform 0.15s,box-shadow 0.15s,background 0.2s,color 0.2s;
+      margin:0.15rem;
+    }
+    .btn-main:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(0,0,0,0.25);
+      background:#ff3366;color:#fff;
+    }
+    .back-link{
+      display:inline-block;
+      margin-top:0.5rem;
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.13em;
+      color:#ffe5ec;
+      text-decoration:none;
+    }
+    .back-link:hover{text-decoration:underline;}
+    @media(max-width:768px){
+      .wrapper{padding:1rem;}
+      .header h1{font-size:2rem;}
+      .board{gap:0.25rem;}
+      .card{font-size:1rem;}
+    }
+    @media(max-width:480px){
+      .header h1{font-size:1.8rem;}
+      .header p{font-size:0.75rem;}
+      .info{font-size:0.75rem;}
+      .card{font-size:0.9rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Memory Hearts</h1>
+      <p>100 little cards, 50 sweet pairs. Match them together.</p>
+    </div>
+
+    <div class="info" id="movesInfo">Moves: 0</div>
+    <div class="info" id="statusInfo"></div>
+
+    <div class="board" id="board"></div>
+
+    <div class="controls">
+      <button class="btn-main" onclick="restartGame()">Restart</button>
+      <a href="games.html" class="back-link">← Back to games</a>
+    </div>
+  </div>
+
+  <script>
+    // Use many different emoji so the 10x10 grid stays fun
+    const iconSet = [
+      "💌","💖","💘","💝","💕","💞","💓","💗","❤️","🩷",
+      "😍","🥰","😘","😻","💑","💏","🌹","🌸","🌷","✨",
+      "⭐","🌙","☀️","🎀","🎁","🍫","🧸","🎶","💍","🥂",
+      "🍓","🍒","🍰","🍭","💞","🫶","🤍","💟","💫","🎈",
+      "🏹","💒","📸","🧁","🍩","🍪","🎧","📖","🏞️","🌅"
+    ]; // 50 icons = 50 pairs
+
+    let cards = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let matches = 0;
+    let moves = 0;
+
+    const board = document.getElementById("board");
+    const movesInfo = document.getElementById("movesInfo");
+    const statusInfo = document.getElementById("statusInfo");
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createBoard() {
+      const pairIcons = iconSet.concat(iconSet); // 50 * 2 = 100 cards
+      const shuffled = shuffle(pairIcons.slice());
+      board.innerHTML = "";
+      cards = [];
+
+      shuffled.forEach((icon, index) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.dataset.icon = icon;
+        card.dataset.index = index;
+        card.textContent = "❣"; // back symbol
+        card.addEventListener("click", onCardClick);
+        board.appendChild(card);
+        cards.push(card);
+      });
+
+      matches = 0;
+      moves = 0;
+      movesInfo.textContent = "Moves: 0";
+      statusInfo.textContent = "Take your time, talk while you play.";
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+    }
+
+    function onCardClick(e) {
+      const card = e.currentTarget;
+      if (lockBoard) return;
+      if (card.classList.contains("flipped") || card.classList.contains("matched")) return;
+
+      card.classList.add("flipped");
+      card.textContent = card.dataset.icon;
+
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      secondCard = card;
+      moves++;
+      movesInfo.textContent = "Moves: " + moves;
+      checkMatch();
+    }
+
+    function checkMatch() {
+      if (!firstCard || !secondCard) return;
+      lockBoard = true;
+
+      if (firstCard.dataset.icon === secondCard.dataset.icon) {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+        matches++;
+        statusInfo.textContent = "Cute! You found a pair. Pairs matched: " + matches + " / 50";
+        resetTurn();
+
+        if (matches === iconSet.length) {
+          statusInfo.textContent = "You matched all 50 pairs in " + moves + " moves! That’s some serious heart power.";
+        }
+      } else {
+        statusInfo.textContent = "Not a match. Remember them and try again together.";
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          firstCard.textContent = "❣";
+          secondCard.textContent = "❣";
+          resetTurn();
+        }, 700);
+      }
+    }
+
+    function resetTurn() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
+    }
+
+    function restartGame() {
+      createBoard();
+    }
+
+    createBoard();
+  </script>
+</body>
+</html>
